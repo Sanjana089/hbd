@@ -1,13 +1,27 @@
-$(document).ready(function() {
-    $(".candles").click(function() {
-        
-      $(".flame").animate({"opacity": 0}, "fast");
-      $(".flame2").animate({"opacity": 0}, "fast");
-      $(".flame3").animate({"opacity": 0}, "fast");
-      $(".text").animate({"top": -130, "opacity": 1}, "normal");
-      $("#confetti").show();
-      Draw();
-    });
+$(document).ready(function () {
+  // Click event on candles
+  $(".candles").click(function (event) {
+    event.stopPropagation(); // Prevent the click event from reaching the document body
+    $(".flame").animate({ "opacity": 0 }, "fast");
+    $(".flame2").animate({ "opacity": 0 }, "fast");
+    $(".flame3").animate({ "opacity": 0 }, "fast");
+    $(".text").animate({ "top": -180, "opacity": 1 }, "fast");
+    // Push new confetti objects to `particles[]`
+    for (var i = 0; i < maxConfettis; i++) {
+      particles.push(new confettiParticle());
+    }
+    Draw();
+  });
+
+  // Click event on the document body (background)
+  $(document.body).click(function () {
+    $(".flame").animate({ "opacity": 1 }, "fast");
+    $(".flame2").animate({ "opacity": 1 }, "fast");
+    $(".flame3").animate({ "opacity": 1 }, "fast");
+    $(".text").animate({ "top": 0, "opacity": 0 }, "fast");
+    particles.length = 0;
+    context.clearRect(0, 0, W, window.innerHeight);
+  });
 });
 
 let W = window.innerWidth;
@@ -42,7 +56,7 @@ function confettiParticle() {
   this.tiltAngleIncremental = Math.random() * 0.07 + 0.05;
   this.tiltAngle = 0;
 
-  this.draw = function() {
+  this.draw = function () {
     context.beginPath();
     context.lineWidth = this.r / 2;
     context.strokeStyle = this.color;
@@ -61,7 +75,7 @@ function Draw() {
   context.clearRect(0, 0, W, window.innerHeight);
 
   for (var i = 0; i < maxConfettis; i++) {
-    results.push(particles[i].draw());
+    results.push(particles[i]?.draw());
   }
 
   let particle = {};
@@ -69,18 +83,20 @@ function Draw() {
   for (var i = 0; i < maxConfettis; i++) {
     particle = particles[i];
 
-    particle.tiltAngle += particle.tiltAngleIncremental;
-    particle.y += (Math.cos(particle.d) + 3 + particle.r / 2) / 2;
-    particle.tilt = Math.sin(particle.tiltAngle - i / 3) * 15;
+    if (particle) {
+      particle.tiltAngle += particle.tiltAngleIncremental;
+      particle.y += (Math.cos(particle.d) + 3 + particle.r / 2) / 2;
+      particle.tilt = Math.sin(particle.tiltAngle - i / 3) * 15;
 
-    if (particle.y <= H) remainingFlakes++;
+      if (particle.y <= H) remainingFlakes++;
 
-    // If a confetti has fluttered out of view,
-    // bring it back to above the viewport and let if re-fall.
-    if (particle.x > W + 30 || particle.x < -30 || particle.y > H) {
-      particle.x = Math.random() * W;
-      particle.y = -30;
-      particle.tilt = Math.floor(Math.random() * 10) - 20;
+      // If a confetti has fluttered out of view,
+      // bring it back to above the viewport and let if re-fall.
+      if (particle.x > W + 30 || particle.x < -30 || particle.y > H) {
+        particle.x = Math.random() * W;
+        particle.y = -30;
+        particle.tilt = Math.floor(Math.random() * 10) - 20;
+      }
     }
   }
 
@@ -89,7 +105,7 @@ function Draw() {
 
 window.addEventListener(
   "resize",
-  function() {
+  function () {
     W = window.innerWidth;
     H = window.innerHeight;
     canvas.width = window.innerWidth;
@@ -97,11 +113,6 @@ window.addEventListener(
   },
   false
 );
-
-// Push new confetti objects to `particles[]`
-for (var i = 0; i < maxConfettis; i++) {
-  particles.push(new confettiParticle());
-}
 
 // Initialize
 canvas.width = W;
