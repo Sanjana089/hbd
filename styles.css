@@ -1,13 +1,25 @@
 body {
-    font-family: "Asap", sans-serif;
-    display: flex;
+  font-family: "Asap", sans-serif;
+  display: flex;
     height:100vh;
     align-items: center;
     justify-content: center;
     background-color: #f29aa3;
-    overflow: hidden;
+  overflow: hidden;
   }
 
+
+/* body {
+  position: relative;
+  min-height: 100vh;
+  text-align: center;
+  overflow-x: hidden;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+  
   #birthday-cake {
     position: relative;
     top:50px;
@@ -229,7 +241,7 @@ body {
     left:-370px;
     top:100px;
     z-index:-1;
-    transition: .7s;
+    transition: .3s;
     opacity:0;
   }
   
@@ -274,6 +286,8 @@ body {
     z-index: 0;
   }
   
+@import url("https://fonts.googleapis.com/css2?family=Asap&display=swap");
+
 canvas {
   -moz-user-select: none;
   -webkit-user-select: none;
