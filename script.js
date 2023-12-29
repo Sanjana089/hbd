@@ -1,13 +1,19 @@
-$(document).ready(function() {
-    $(".candles").click(function() {
-        
-      $(".flame").animate({"opacity": 0}, "fast");
-      $(".flame2").animate({"opacity": 0}, "fast");
-      $(".flame3").animate({"opacity": 0}, "fast");
-      $(".text").animate({"top": -130, "opacity": 1}, "normal");
-      $("#confetti").show();
-      Draw();
-    });
+$(document).ready(function () {
+  $(".candles").click(function () {
+
+    $(".flame").animate({ "opacity": 0 }, "fast");
+    $(".flame2").animate({ "opacity": 0 }, "fast");
+    $(".flame3").animate({ "opacity": 0 }, "fast");
+    $(".text").animate({ "top": -130, "opacity": 1 }, "normal");
+    $("#confetti").show();
+    Draw();
+  });
+  $(document.body).click(function (event) {
+    // Check if the clicked element is not part of the candles
+    if (!$(event.target).hasClass("candles") && !$(event.target).parents(".candles").length) {
+      location.reload(true);
+    }
+  });
 });
 
 let W = window.innerWidth;
@@ -42,7 +48,7 @@ function confettiParticle() {
   this.tiltAngleIncremental = Math.random() * 0.07 + 0.05;
   this.tiltAngle = 0;
 
-  this.draw = function() {
+  this.draw = function () {
     context.beginPath();
     context.lineWidth = this.r / 2;
     context.strokeStyle = this.color;
@@ -89,7 +95,7 @@ function Draw() {
 
 window.addEventListener(
   "resize",
-  function() {
+  function () {
     W = window.innerWidth;
     H = window.innerHeight;
     canvas.width = window.innerWidth;
